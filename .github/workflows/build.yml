@@ -1,92 +1,83 @@
 name: Build MOREX Father APK
 
 on:
+  workflow_dispatch:
   push:
     branches: [ main ]
-  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: read
 
     steps:
-      - name: Checkout
+      - name: 1. Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
 
-      - name: Verify project files
+      - name: 2. Verify required files
         run: |
-          echo "📂 محتوى الجذر:"
+          echo "=== ROOT ==="
           ls -la
-          test -d app || (echo "❌ app/ missing" && exit 1)
-          test -f build.gradle || (echo "❌ build.gradle missing" && exit 1)
-          echo "✅ Project structure OK"
+          echo ""
+          FAILED=0
+          [ -d app ]            || { echo "❌ app/ missing";            FAILED=1; }
+          [ -f build.gradle ]   || { echo "❌ build.gradle missing";    FAILED=1; }
+          [ -f settings.gradle ]|| { echo "❌ settings.gradle missing"; FAILED=1; }
+          [ -f gradlew ]        || { echo "❌ gradlew missing";         FAILED=1; }
+          [ -f app/build.gradle ]|| { echo "❌ app/build.gradle missing";FAILED=1; }
+          if [ $FAILED -eq 1 ]; then exit 1; fi
+          echo "✅ كل الملفات موجودة"
 
-      - name: Setup JDK 17
+      - name: 3. Setup JDK 17
         uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v3
-        with:
-          gradle-version: '8.4'
+      - name: 4. Verify Java + Android SDK (pre-installed)
+        run: |
+          java -version
+          echo ""
+          echo "=== ANDROID_HOME ==="
+          echo "$ANDROID_HOME"
+          echo "=== SDK contents ==="
+          ls -la $ANDROID_HOME || echo "no SDK"
+          echo ""
+          echo "=== platforms ==="
+          ls $ANDROID_HOME/platforms || echo "no platforms"
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
-
-      - name: Decode google-services.json
+      - name: 5. Decode google-services.json
         run: |
           if [ -z "${{ secrets.GOOGLE_SERVICES_JSON_BASE64 }}" ]; then
-            echo "❌ GOOGLE_SERVICES_JSON_BASE64 غير مضاف في Secrets"
+            echo "❌ GOOGLE_SERVICES_JSON_BASE64 غير مضاف"
             exit 1
           fi
-          echo "${{ secrets.GOOGLE_SERVICES_JSON_BASE64 }}" | base64 --decode > app/google-services.json
+          echo "${{ secrets.GOOGLE_SERVICES_JSON_BASE64 }}" | base64 -d > app/google-services.json
           echo "✅ google-services.json: $(wc -c < app/google-services.json) bytes"
 
-      - name: Decode Keystore (optional)
-        run: |
-          if [ -n "${{ secrets.KEYSTORE_BASE64 }}" ]; then
-            echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > morex-father.jks
-            echo "✅ Keystore: $(wc -c < morex-father.jks) bytes"
-          else
-            echo "⚠️ KEYSTORE_BASE64 غير مضاف — سنستخدم debug signing"
-          fi
-
-      - name: Grant execute to gradlew
+      - name: 6. Grant execute to gradlew
         run: chmod +x gradlew
 
-      - name: Build Debug APK
-        env:
-          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
-          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
-          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+      - name: 7. Build Debug APK
         run: |
-          ./gradlew assembleDebug --stacktrace
+          ./gradlew assembleDebug --stacktrace 2>&1 | tail -300
 
-      - name: Build Release APK
-        continue-on-error: true
-        env:
-          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
-          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
-          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+      - name: 8. List APK output
+        if: always()
         run: |
-          ./gradlew assembleRelease --stacktrace
+          echo "=== APK files ==="
+          find app/build/outputs -name "*.apk" -type f 2>/dev/null || echo "لا يوجد APK"
+          echo ""
+          echo "=== outputs tree ==="
+          find app/build/outputs -type f 2>/dev/null || echo "no outputs"
 
-      - name: Upload Debug APK
+      - name: 9. Upload Debug APK
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: morex-father-debug
           path: app/build/outputs/apk/debug/*.apk
           if-no-files-found: warn
-
-      - name: Upload Release APK
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: morex-father-release
-          path: app/build/outputs/apk/release/*.apk
-          if-no-files-found: ignore
