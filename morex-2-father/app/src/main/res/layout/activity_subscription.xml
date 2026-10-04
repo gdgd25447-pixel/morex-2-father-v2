@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@color/background">
+
+    <LinearLayout android:id="@+id/header"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="horizontal" android:padding="16dp"
+        android:gravity="center_vertical" android:background="@color/morex_blue"
+        app:layout_constraintTop_toTopOf="parent">
+        <ImageView android:id="@+id/ivBack"
+            android:layout_width="28dp" android:layout_height="28dp"
+            android:src="@drawable/ic_arrow_back" app:tint="@color/text_on_primary" />
+        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+            android:layout_weight="1" android:text="الاشتراك"
+            android:textColor="@color/text_on_primary" android:textSize="20sp"
+            android:textStyle="bold" android:gravity="center" />
+        <View android:layout_width="28dp" android:layout_height="28dp" />
+    </LinearLayout>
+
+    <ScrollView android:layout_width="0dp" android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintTop_toBottomOf="@id/header"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="vertical" android:padding="16dp">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                app:cardCornerRadius="20dp" app:cardElevation="4dp"
+                app:cardBackgroundColor="@color/morex_gold">
+
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="vertical" android:padding="20dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="الباقة الحالية" android:textColor="#FFFFFF"
+                        android:textSize="13sp" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="الباقة الذهبية" android:textColor="#0F172A"
+                        android:textSize="24sp" android:textStyle="bold"
+                        android:layout_marginTop="4dp" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="👑 اختر باقة جديدة"
+                android:textColor="@color/text_primary" android:textSize="18sp"
+                android:textStyle="bold" android:layout_marginTop="24dp" />
+
+            <LinearLayout android:id="@+id/plansContainer"
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="vertical" android:layout_marginTop="12dp" />
+
+            <ProgressBar android:id="@+id/progressBar"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:indeterminateTint="@color/morex_blue" android:visibility="gone" />
+        </LinearLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

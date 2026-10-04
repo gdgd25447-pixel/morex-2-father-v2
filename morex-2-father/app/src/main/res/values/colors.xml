@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Basic -->
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+
+    <!-- Primary -->
+    <color name="morex_blue">#1E3A8A</color>
+    <color name="morex_blue_light">#2563EB</color>
+    <color name="morex_blue_dark">#0F172A</color>
+    <color name="morex_gold">#F59E0B</color>
+    <color name="morex_gold_light">#FBBF24</color>
+    <color name="morex_gold_dark">#D97706</color>
+
+    <!-- Status -->
+    <color name="status_safe">#10B981</color>
+    <color name="status_warning">#F59E0B</color>
+    <color name="status_danger">#EF4444</color>
+    <color name="status_info">#3B82F6</color>
+    <color name="status_purple">#8B5CF6</color>
+    <color name="status_teal">#14B8A6</color>
+
+    <!-- Backgrounds -->
+    <color name="background">#F8FAFC</color>
+    <color name="surface">#FFFFFF</color>
+    <color name="surface_variant">#F1F5F9</color>
+    <color name="card_background">#FFFFFF</color>
+
+    <!-- Text -->
+    <color name="text_primary">#0F172A</color>
+    <color name="text_secondary">#64748B</color>
+    <color name="text_tertiary">#94A3B8</color>
+    <color name="text_on_primary">#FFFFFF</color>
+
+    <!-- Borders -->
+    <color name="divider">#E2E8F0</color>
+    <color name="border_light">#E2E8F0</color>
+    <color name="border_focused">#1E3A8A</color>
+
+    <!-- State -->
+    <color name="disabled">#CBD5E1</color>
+    <color name="hover">#F1F5F9</color>
+    <color name="ripple">#1E3A8A22</color>
+
+    <!-- Chart Colors -->
+    <color name="chart_1">#3B82F6</color>
+    <color name="chart_2">#F59E0B</color>
+    <color name="chart_3">#10B981</color>
+    <color name="chart_4">#EF4444</color>
+    <color name="chart_5">#8B5CF6</color>
+
+    <!-- Chart Color Variations -->
+    <color name="light_blue">#DBEAFE</color>
+    <color name="light_green">#D1FAE5</color>
+    <color name="light_red">#FEE2E2</color>
+    <color name="light_yellow">#FEF3C7</color>
+    <color name="light_purple">#EDE9FE</color>
+    <color name="light_teal">#CCFBF1</color>
+    <color name="light_orange">#FFEDD5</color>
+
+    <!-- Transparent -->
+    <color name="transparent">#00000000</color>
+    <color name="scrim">#80000000</color>
+    <color name="scrim_light">#40000000</color>
+
+    <!-- Islamic specific -->
+    <color name="islamic_green">#059669</color>
+    <color name="islamic_green_light">#10B981</color>
+    <color name="islamic_gold">#F59E0B</color>
+</resources>
