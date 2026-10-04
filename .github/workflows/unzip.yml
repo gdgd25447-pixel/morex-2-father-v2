@@ -19,24 +19,20 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Download Project File from Google Drive
+      - name: Install gdown
+        run: pip install gdown
+
+      - name: Download Project File from Google Drive Direct
         run: |
           FILE_ID="165nBZF28et3iTZjBWk8DP3-U1TiZr6wL"
-          curl -L -c cookies.txt "https://drive.google.com/uc?export=download&id=${FILE_ID}" -o project.zip
-          
-          # Verification
-          if [ $(stat -c%s "project.zip") -lt 1000000 ]; then
-            echo "Confirming large file download from Drive..."
-            CONFIRM=$(grep -o 'confirm=[^&]*' cookies.txt | cut -d'=' -f2)
-            curl -L -b cookies.txt "https://drive.google.com/uc?export=download&confirm=${CONFIRM}&id=${FILE_ID}" -o project.zip
-          fi
+          gdown --id "${FILE_ID}" -O project.zip
 
       - name: Extract Project Zip
         run: |
           mkdir -p extracted_project
           unzip -q project.zip -d extracted_project
           
-          # Find directory containing settings.gradle / build.gradle
+          # البحث عن المجلد الذي يحتوي على ملفات البناء
           ROOT_DIR=$(find extracted_project -maxdepth 3 -name "settings.gradle*" -o -name "build.gradle*" | head -n 1 | xargs dirname)
           
           if [ -n "$ROOT_DIR" ]; then
