@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- قالب قائمة موحّد: Loading + Empty + Error(+إعادة المحاولة) + SwipeRefresh -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="vertical" android:background="@color/background">
+
+    <LinearLayout
+        android:layout_width="match_parent" android:layout_height="56dp"
+        android:orientation="horizontal" android:gravity="center_vertical"
+        android:paddingHorizontal="8dp" android:background="@color/morex_blue">
+        <ImageView android:id="@+id/ivBack"
+            android:layout_width="40dp" android:layout_height="40dp" android:padding="8dp"
+            android:src="@drawable/ic_arrow_back" app:tint="@color/text_on_primary"
+            android:contentDescription="@string/common_back" />
+        <TextView android:id="@+id/tvTitle"
+            android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
+            android:textColor="@color/text_on_primary" android:textSize="20sp"
+            android:textStyle="bold" android:gravity="center" />
+        <View android:layout_width="40dp" android:layout_height="40dp" />
+    </LinearLayout>
+
+    <FrameLayout android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1">
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefresh"
+            android:layout_width="match_parent" android:layout_height="match_parent">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvItems"
+                android:layout_width="match_parent" android:layout_height="match_parent"
+                android:padding="12dp" android:clipToPadding="false" />
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        <ProgressBar android:id="@+id/progressBar"
+            android:layout_width="40dp" android:layout_height="40dp"
+            android:layout_gravity="center" android:visibility="gone"
+            android:indeterminateTint="@color/morex_blue" />
+
+        <TextView android:id="@+id/emptyView"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:layout_gravity="center" android:visibility="gone"
+            android:text="@string/common_empty" android:textColor="@color/text_secondary"
+            android:textSize="16sp" />
+
+        <LinearLayout android:id="@+id/errorView"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:layout_gravity="center" android:orientation="vertical"
+            android:gravity="center" android:visibility="gone">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="@string/common_network_error" android:textColor="@color/text_secondary"
+                android:textSize="16sp" />
+            <com.google.android.material.button.MaterialButton android:id="@+id/btnRetry"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:layout_marginTop="12dp" android:text="@string/common_retry" />
+        </LinearLayout>
+    </FrameLayout>
+</LinearLayout>

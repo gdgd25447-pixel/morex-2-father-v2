@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@color/background">
+
+    <LinearLayout android:id="@+id/header"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="horizontal" android:padding="16dp"
+        android:gravity="center_vertical" android:background="@color/morex_blue"
+        app:layout_constraintTop_toTopOf="parent">
+        <ImageView android:id="@+id/ivBack"
+            android:layout_width="28dp" android:layout_height="28dp"
+            android:src="@drawable/ic_arrow_back" app:tint="@color/text_on_primary" />
+        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+            android:layout_weight="1" android:text="التحكم بالجهاز"
+            android:textColor="@color/text_on_primary" android:textSize="20sp"
+            android:textStyle="bold" android:gravity="center" />
+        <View android:layout_width="28dp" android:layout_height="28dp" />
+    </LinearLayout>
+
+    <ScrollView android:layout_width="0dp" android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintTop_toBottomOf="@id/header"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="vertical" android:padding="16dp">
+
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="horizontal" android:weightSum="2"
+                android:layout_marginTop="8dp">
+
+                <include layout="@layout/item_control_card"
+                    android:id="@+id/cardLock" android:layout_width="0dp"
+                    android:layout_height="wrap_content" android:layout_weight="1" />
+                <include layout="@layout/item_control_card"
+                    android:id="@+id/cardSchedule" android:layout_width="0dp"
+                    android:layout_height="wrap_content" android:layout_weight="1"
+                    android:layout_marginStart="12dp" />
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="horizontal" android:weightSum="2" android:layout_marginTop="12dp">
+                <include layout="@layout/item_control_card"
+                    android:id="@+id/cardApps" android:layout_width="0dp"
+                    android:layout_height="wrap_content" android:layout_weight="1" />
+                <include layout="@layout/item_control_card"
+                    android:id="@+id/cardWeb" android:layout_width="0dp"
+                    android:layout_height="wrap_content" android:layout_weight="1"
+                    android:layout_marginStart="12dp" />
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="horizontal" android:weightSum="2" android:layout_marginTop="12dp">
+                <include layout="@layout/item_control_card"
+                    android:id="@+id/cardScreenshot" android:layout_width="0dp"
+                    android:layout_height="wrap_content" android:layout_weight="1" />
+                <include layout="@layout/item_control_card"
+                    android:id="@+id/cardMic" android:layout_width="0dp"
+                    android:layout_height="wrap_content" android:layout_weight="1"
+                    android:layout_marginStart="12dp" />
+            </LinearLayout>
+
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="⚡ أوامر سريعة" android:textColor="@color/text_primary"
+                android:textSize="16sp" android:textStyle="bold"
+                android:layout_marginTop="24dp" />
+
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="horizontal" android:weightSum="3"
+                android:layout_marginTop="12dp">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnRing"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="0dp" android:layout_height="60dp"
+                    android:layout_weight="1" android:text="🔔 رنين"
+                    android:textColor="@color/morex_blue"
+                    app:strokeColor="@color/morex_blue" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnVibrate"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="0dp" android:layout_height="60dp"
+                    android:layout_weight="1" android:text="📳 اهتزاز"
+                    android:textColor="@color/morex_blue"
+                    app:strokeColor="@color/morex_blue"
+                    android:layout_marginStart="8dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnMessage"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="0dp" android:layout_height="60dp"
+                    android:layout_weight="1" android:text="💬 رسالة"
+                    android:textColor="@color/morex_blue"
+                    app:strokeColor="@color/morex_blue"
+                    android:layout_marginStart="8dp" />
+            </LinearLayout>
+
+            <ProgressBar android:id="@+id/progressBar"
+                android:layout_width="32dp" android:layout_height="32dp"
+                android:layout_gravity="center" android:layout_marginTop="20dp"
+                android:indeterminateTint="@color/morex_gold" android:visibility="gone" />
+
+        </LinearLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.USE_BIOMETRIC" />
+    <uses-permission android:name="android.permission.USE_FINGERPRINT" />
+    <uses-permission android:name="com.google.android.gms.permission.AD_ID" />
+
+    <application
+        android:name=".FatherApp"
+        android:allowBackup="false"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.MorexFather"
+        android:usesCleartextTraffic="false"
+        tools:targetApi="34">
+
+        <!-- Firebase -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@mipmap/ic_launcher" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/morex_gold" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="morex_default_channel" />
+
+        <!-- Splash -->
+        <activity
+            android:name=".SplashActivity"
+            android:exported="true"
+            android:theme="@style/Theme.MorexFather.Splash">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Onboarding -->
+        <activity android:name=".onboarding.LanguageActivity" android:exported="false" />
+        <activity android:name=".onboarding.OnboardingActivity" android:exported="false" />
+
+        <!-- Auth -->
+        <activity android:name=".auth.LoginActivity" android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".auth.OtpActivity" android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".auth.PinLockActivity" android:exported="false"
+            android:launchMode="singleTop" />
+
+        <!-- Main -->
+        <activity android:name=".MainActivity" android:exported="false"
+            android:launchMode="singleTop" />
+
+        <!-- Children -->
+        <activity android:name=".children.ChildrenListActivity" android:exported="false" />
+        <activity android:name=".children.AddChildActivity" android:exported="false" />
+        <activity android:name=".children.ChildDetailActivity" android:exported="false" />
+        <activity android:name=".children.PairingCodeActivity" android:exported="false" />
+
+        <!-- Location -->
+        <activity android:name=".location.MapActivity" android:exported="false" />
+        <activity android:name=".location.LocationHistoryActivity" android:exported="false" />
+        <activity android:name=".location.SpeedAlertsActivity" android:exported="false" />
+
+        <!-- Geofence -->
+        <activity android:name=".geofence.GeofenceListActivity" android:exported="false" />
+        <activity android:name=".geofence.GeofenceEditActivity" android:exported="false" />
+        <activity android:name=".geofence.GeofenceAlertsActivity" android:exported="false" />
+
+        <!-- Control -->
+        <activity android:name=".control.DeviceControlActivity" android:exported="false" />
+        <activity android:name=".control.LockScreenActivity" android:exported="false" />
+        <activity android:name=".control.ScheduleActivity" android:exported="false" />
+
+        <!-- Apps -->
+        <activity android:name=".apps.AppsListActivity" android:exported="false" />
+        <activity android:name=".apps.AppBlockerActivity" android:exported="false" />
+        <activity android:name=".apps.AppUsageActivity" android:exported="false" />
+
+        <!-- Web -->
+        <activity android:name=".web.WebFilterActivity" android:exported="false" />
+        <activity android:name=".web.WebHistoryActivity" android:exported="false" />
+        <activity android:name=".web.KeywordAlertsActivity" android:exported="false" />
+
+        <!-- Monitor -->
+        <activity android:name=".monitor.AlertsActivity" android:exported="false" />
+        <activity android:name=".monitor.AlertDetailActivity" android:exported="false" />
+        <activity android:name=".monitor.SosActivity" android:exported="false" />
+        <activity android:name=".monitor.CallsActivity" android:exported="false" />
+        <activity android:name=".monitor.SmsActivity" android:exported="false" />
+
+        <!-- Media -->
+        <activity android:name=".media.MediaGalleryActivity" android:exported="false" />
+        <activity android:name=".media.ScreenshotActivity" android:exported="false" />
+        <activity android:name=".media.AudioStreamActivity" android:exported="false" />
+
+        <!-- Other -->
+        <activity android:name=".commands.CommandsActivity" android:exported="false" />
+        <activity android:name=".reports.ReportsActivity" android:exported="false" />
+        <activity android:name=".subscription.SubscriptionActivity" android:exported="false" />
+        <activity android:name=".subscription.PaymentActivity" android:exported="false" />
+        <activity android:name=".referral.ReferralActivity" android:exported="false" />
+
+        <!-- Settings -->
+        <activity android:name=".settings.SettingsActivity" android:exported="false" />
+        <activity android:name=".settings.ProfileActivity" android:exported="false" />
+        <activity android:name=".settings.DevicesActivity" android:exported="false" />
+        <activity android:name=".settings.LegalActivity" android:exported="false" />
+        <activity android:name=".settings.FaqActivity" android:exported="false" />
+        <activity android:name=".settings.ChatActivity" android:exported="false" />
+
+        <!-- FCM Service -->
+        <service
+            android:name=".network.FCMService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+    </application>
+</manifest>

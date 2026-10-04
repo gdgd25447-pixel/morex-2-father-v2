@@ -1,0 +1,16 @@
+# Gradle / Android
+.gradle/
+build/
+local.properties
+captures/
+*.apk
+*.aab
+.idea/
+*.iml
+
+# أسرار — لا تُرفع أبداً
+*.jks
+*.keystore
+google-services.json
+keystore.properties
+.env
