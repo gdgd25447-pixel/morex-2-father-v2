@@ -14,36 +14,45 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Download ZIP from Release
+      - name: Download ZIP
         run: |
-          echo "📥 Downloading ZIP..."
+          echo "📥 Downloading..."
           curl -L -o father.zip \
             "https://github.com/gdgd25447-pixel/morex-2-father-v2/releases/download/v1.0/morex-2-father-final-7.zip"
+          echo "📊 Size:"
           ls -lh father.zip
+          echo "📋 Type:"
           file father.zip
 
-      - name: Verify it's a real ZIP
-        run: |
-          if ! unzip -t father.zip > /dev/null 2>&1; then
-            echo "❌ ERROR: Downloaded file is not a valid ZIP"
-            file father.zip
-            head -c 500 father.zip
-            exit 1
-          fi
-          echo "✅ Valid ZIP confirmed"
+      - name: Install 7-Zip
+        run: sudo apt-get update && sudo apt-get install -y p7zip-full
 
-      - name: Extract ZIP
+      - name: Extract with 7z (handles all ZIP variants)
         run: |
-          echo "📦 Extracting..."
-          unzip -o father.zip
+          echo "📦 Extracting with 7z..."
+          7z x father.zip -y
+          echo "🗑️ Cleaning up..."
           rm -f father.zip
-          echo "📂 Extracted files:"
+          echo "📂 Result:"
           ls -la
+
+      - name: Move files to root if inside subfolder
+        run: |
+          if [ -d "morex-2-father" ]; then
+            echo "📁 Moving files from morex-2-father/ to root..."
+            shopt -s dotglob
+            mv morex-2-father/* .
+            rmdir morex-2-father
+            echo "📂 After move:"
+            ls -la
+          else
+            echo "✅ Files already at root"
+          fi
 
       - name: Commit files
         run: |
           git config user.name "MOREX Bot"
           git config user.email "bot@morex.app"
           git add .
-          git commit -m "Auto-extract father ZIP" || echo "No changes"
+          git commit -m "Auto-extract father files" || echo "No changes"
           git push
