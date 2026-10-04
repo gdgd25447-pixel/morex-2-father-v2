@@ -18,25 +18,21 @@ android {
         vectorDrawables { useSupportLibrary true }
         multiDexEnabled true
 
-        // Certificate pinning: دبابيس SPKI مفصولة بفواصل، مثل sha256/AAAA...=,sha256/BBBB...=
-        // تُمرَّر عبر -PMOREX_CERT_PINS أو gradle.properties المحلي (انظر scripts/get_pins.sh).
         buildConfigField "String", "CERT_PINS", "\"${project.findProperty('MOREX_CERT_PINS') ?: ''}\""
-        // SHA-256 لشهادة توقيع الإصدار (اختياري) لفحص anti-tamper؛ فارغ = معطّل.
-        // MOREX_PIN_ENFORCE=true يجعل الاتصال يفشل عند عدم تطابق الدبوس. الافتراضي false = تسجيل فقط (لا قفل للتطبيق).
         buildConfigField "boolean", "PIN_ENFORCE", "${project.findProperty('MOREX_PIN_ENFORCE') ?: 'false'}"
         buildConfigField "String", "EXPECTED_SIGNATURE_SHA256", "\"${project.findProperty('MOREX_SIGNATURE_SHA256') ?: ''}\""
     }
 
-    // التوقيع: كلمات المرور من متغيرات البيئة أو gradle.properties المحلي فقط — لا قيم افتراضية في الكود.
     def ksPass  = System.getenv("KEYSTORE_PASSWORD") ?: project.findProperty("MOREX_KEYSTORE_PASSWORD")
     def ksAlias = System.getenv("KEY_ALIAS")         ?: project.findProperty("MOREX_KEY_ALIAS")
     def keyPass = System.getenv("KEY_PASSWORD")      ?: project.findProperty("MOREX_KEY_PASSWORD")
-    def signingReady = file("morex-father.jks").exists() && ksPass && ksAlias && keyPass
+    def ksFile  = file("../morex-father.jks")
+    def signingReady = ksFile.exists() && ksPass && ksAlias && keyPass
 
     signingConfigs {
         release {
             if (signingReady) {
-                storeFile file("morex-father.jks")
+                storeFile ksFile
                 storePassword ksPass
                 keyAlias ksAlias
                 keyPassword keyPass
@@ -49,9 +45,7 @@ android {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            if (signingReady) {
-                signingConfig signingConfigs.release
-            }
+            signingConfig signingReady ? signingConfigs.release : signingConfigs.debug
         }
         debug {
             debuggable true
