@@ -1,6 +1,8 @@
 name: Download and Extract Father ZIP
 
 on:
+  push:
+    branches: [ main ]
   workflow_dispatch:
 
 jobs:
@@ -12,10 +14,25 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Download ZIP from Google Drive
+      - name: Check for ZIP
+        id: check
         run: |
-          echo "📥 Downloading ZIP..."
-          curl -L "https://drive.google.com/uc?export=download&id=FILE_ID" -o morex-2-father-final.zip
+          if [ -f "morex-2-father-final.zip" ]; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+            echo "✅ Local ZIP found"
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+            echo "❌ No local ZIP — will download from Google Drive"
+          fi
+
+      - name: Download ZIP from Google Drive
+        if: steps.check.outputs.exists == 'false'
+        run: |
+          echo "📥 Downloading ZIP from Google Drive..."
+          FILE_ID="165nBZF28et3iTZjBWk8DP3-U1TiZr6wL"
+          curl -L -c /tmp/cookies.txt \
+            "https://drive.usercontent.google.com/download?id=${FILE_ID}&export=download" \
+            -o morex-2-father-final.zip
           ls -lh morex-2-father-final.zip
 
       - name: Extract ZIP
@@ -31,5 +48,5 @@ jobs:
           git config user.name "MOREX Bot"
           git config user.email "bot@morex.app"
           git add .
-          git commit -m "Download and extract father ZIP" || echo "No changes"
+          git commit -m "Auto-extract father ZIP" || echo "No changes"
           git push
