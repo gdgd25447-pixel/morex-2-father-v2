@@ -1,0 +1,25 @@
+name: Download and Unzip from Google Drive
+
+on:
+  workflow_dispatch:
+
+jobs:
+  unzip_job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Download ZIP from Google Drive
+        run: |
+          # رابط التحميل المباشر للـ ZIP من Google Drive
+          FILE_ID="165nBZF28et3iTZjBWk8DP3-U1TiZr6wL"
+          curl -sc /tmp/cookie "https://drive.google.com/uc?export=download&id=$FILE_ID" > /tmp/file_id
+          CODE="$(awk '/_warning_/ {print $NF}' /tmp/cookie)"
+          curl -Lb /tmp/cookie "https://drive.google.com/uc?export=download&confirm=$CODE&id=$FILE_ID" -o downloaded_file.zip
+
+      - name: Extract ZIP file
+        run: |
+          unzip downloaded_file.zip -d extracted_content
+          ls -la extracted_content
+          
