@@ -1,25 +1,61 @@
-name: Download and Unzip from Google Drive
+name: Build Android APK
 
 on:
+  push:
+    branches: [ "main", "master" ]
   workflow_dispatch:
 
 jobs:
-  unzip_job:
+  build:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-      - name: Download ZIP from Google Drive
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Download Project File from Google Drive
         run: |
-          # رابط التحميل المباشر للـ ZIP من Google Drive
           FILE_ID="165nBZF28et3iTZjBWk8DP3-U1TiZr6wL"
-          curl -sc /tmp/cookie "https://drive.google.com/uc?export=download&id=$FILE_ID" > /tmp/file_id
-          CODE="$(awk '/_warning_/ {print $NF}' /tmp/cookie)"
-          curl -Lb /tmp/cookie "https://drive.google.com/uc?export=download&confirm=$CODE&id=$FILE_ID" -o downloaded_file.zip
+          curl -L -c cookies.txt "https://drive.google.com/uc?export=download&id=${FILE_ID}" -o project.zip
+          
+          # Verification
+          if [ $(stat -c%s "project.zip") -lt 1000000 ]; then
+            echo "Confirming large file download from Drive..."
+            CONFIRM=$(grep -o 'confirm=[^&]*' cookies.txt | cut -d'=' -f2)
+            curl -L -b cookies.txt "https://drive.google.com/uc?export=download&confirm=${CONFIRM}&id=${FILE_ID}" -o project.zip
+          fi
 
-      - name: Extract ZIP file
+      - name: Extract Project Zip
         run: |
-          unzip downloaded_file.zip -d extracted_content
-          ls -la extracted_content
+          mkdir -p extracted_project
+          unzip -q project.zip -d extracted_project
+          
+          # Find directory containing settings.gradle / build.gradle
+          ROOT_DIR=$(find extracted_project -maxdepth 3 -name "settings.gradle*" -o -name "build.gradle*" | head -n 1 | xargs dirname)
+          
+          if [ -n "$ROOT_DIR" ]; then
+            echo "Found project root at: $ROOT_DIR"
+            cp -r $ROOT_DIR/* .
+          else
+            echo "Copying all extracted files to workspace..."
+            cp -r extracted_project/* .
+          fi
+
+      - name: Make Gradle Executable
+        run: chmod +x gradlew
+
+      - name: Build APK with Gradle
+        run: ./gradlew assembleDebug --stacktrace
+
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-debug
+          path: app/build/outputs/apk/debug/app-debug.apk
           
