@@ -1,4 +1,4 @@
-name: Extract Father ZIP
+name: Extract Father ZIP (With Repair)
 
 on:
   push:
@@ -16,38 +16,46 @@ jobs:
 
       - name: Download ZIP
         run: |
-          echo "📥 Downloading..."
           curl -L -o father.zip \
             "https://github.com/gdgd25447-pixel/morex-2-father-v2/releases/download/v1.0/morex-2-father-final-7.zip"
-          echo "📊 Size:"
           ls -lh father.zip
-          echo "📋 Type:"
-          file father.zip
 
-      - name: Install 7-Zip
-        run: sudo apt-get update && sudo apt-get install -y p7zip-full
+      - name: Install tools
+        run: sudo apt-get update && sudo apt-get install -y p7zip-full zip
 
-      - name: Extract with 7z (handles all ZIP variants)
+      - name: Try normal extraction
         run: |
-          echo "📦 Extracting with 7z..."
-          7z x father.zip -y
-          echo "🗑️ Cleaning up..."
-          rm -f father.zip
-          echo "📂 Result:"
+          echo "🔧 Attempt 1: 7z normal..."
+          7z x father.zip -y -bd || true
+          echo "📂 After 7z:"
+          ls -la | head -20
+
+      - name: Try repair if needed
+        run: |
+          if [ ! -d "morex-2-father" ] && [ ! -f "build.gradle" ]; then
+            echo "🔧 Attempt 2: unzip -FF (Frankenstein repair)..."
+            unzip -FF father.zip -d extracted/ || true
+            echo "🔧 Attempt 3: 7z with force..."
+            7z x father.zip -y -bd -bso0 -bsp0 || true
+          fi
+          echo "📂 Final result:"
           ls -la
 
-      - name: Move files to root if inside subfolder
+      - name: Move files to root
         run: |
+          shopt -s dotglob
           if [ -d "morex-2-father" ]; then
-            echo "📁 Moving files from morex-2-father/ to root..."
-            shopt -s dotglob
-            mv morex-2-father/* .
-            rmdir morex-2-father
-            echo "📂 After move:"
-            ls -la
-          else
-            echo "✅ Files already at root"
+            mv morex-2-father/* . 2>/dev/null || true
+            rmdir morex-2-father 2>/dev/null || true
           fi
+          if [ -d "extracted" ]; then
+            if [ -d "extracted/morex-2-father" ]; then
+              mv extracted/morex-2-father/* . 2>/dev/null || true
+            fi
+          fi
+          rm -rf extracted father.zip
+          echo "📂 After move:"
+          ls -la
 
       - name: Commit files
         run: |
