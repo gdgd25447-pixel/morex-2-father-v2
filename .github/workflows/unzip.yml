@@ -24,8 +24,7 @@ jobs:
 
       - name: Download Project File from Google Drive Direct
         run: |
-          FILE_ID="165nBZF28et3iTZjBWk8DP3-U1TiZr6wL"
-          gdown --id "${FILE_ID}" -O project.zip
+          gdown "https://drive.google.com/uc?id=165nBZF28et3iTZjBWk8DP3-U1TiZr6wL" -O project.zip
 
       - name: Extract Project Zip
         run: |
