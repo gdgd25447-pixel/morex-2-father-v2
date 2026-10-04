@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_splash_gradient"
+    android:fitsSystemWindows="true">
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="24dp"
+            android:gravity="center_horizontal">
+
+            <Space android:layout_width="match_parent" android:layout_height="32dp" />
+
+            <ImageView
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:src="@drawable/ic_lock_secure"
+                android:background="@drawable/bg_circle_light_blue"
+                android:padding="16dp" />
+
+            <Space android:layout_width="match_parent" android:layout_height="16dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/otp_title"
+                android:textColor="@color/text_on_primary"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:fontFamily="@font/cairo_bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/otp_subtitle"
+                android:textColor="#94A3B8"
+                android:textSize="13sp"
+                android:fontFamily="@font/cairo_regular"
+                android:layout_marginTop="6dp" />
+
+            <!-- ⭐ رقم الهاتف — LTR لتصحيح ترتيب +967 -->
+            <TextView
+                android:id="@+id/tvPhoneNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="+967 733142476"
+                android:textColor="@color/morex_gold"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:fontFamily="@font/cairo_bold"
+                android:textDirection="ltr"
+                android:layoutDirection="ltr"
+                android:layout_marginTop="6dp" />
+
+            <Space android:layout_width="match_parent" android:layout_height="28dp" />
+
+            <!-- ⭐ OTP Boxes — LTR + Focus صحيح -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:weightSum="6"
+                android:layoutDirection="ltr">
+
+                <EditText android:id="@+id/etOtp1"
+                    android:layout_width="0dp" android:layout_height="64dp"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="6dp"
+                    android:background="@drawable/bg_otp_box_focused"
+                    android:gravity="center"
+                    android:inputType="number"
+                    android:maxLength="1"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary"
+                    android:textDirection="ltr"
+                    android:importantForAutofill="no" />
+
+                <EditText android:id="@+id/etOtp2"
+                    android:layout_width="0dp" android:layout_height="64dp"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="6dp"
+                    android:background="@drawable/bg_otp_box"
+                    android:gravity="center"
+                    android:inputType="number"
+                    android:maxLength="1"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary"
+                    android:textDirection="ltr"
+                    android:importantForAutofill="no" />
+
+                <EditText android:id="@+id/etOtp3"
+                    android:layout_width="0dp" android:layout_height="64dp"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="6dp"
+                    android:background="@drawable/bg_otp_box"
+                    android:gravity="center"
+                    android:inputType="number"
+                    android:maxLength="1"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary"
+                    android:textDirection="ltr"
+                    android:importantForAutofill="no" />
+
+                <EditText android:id="@+id/etOtp4"
+                    android:layout_width="0dp" android:layout_height="64dp"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="6dp"
+                    android:background="@drawable/bg_otp_box"
+                    android:gravity="center"
+                    android:inputType="number"
+                    android:maxLength="1"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary"
+                    android:textDirection="ltr"
+                    android:importantForAutofill="no" />
+
+                <EditText android:id="@+id/etOtp5"
+                    android:layout_width="0dp" android:layout_height="64dp"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="6dp"
+                    android:background="@drawable/bg_otp_box"
+                    android:gravity="center"
+                    android:inputType="number"
+                    android:maxLength="1"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary"
+                    android:textDirection="ltr"
+                    android:importantForAutofill="no" />
+
+                <EditText android:id="@+id/etOtp6"
+                    android:layout_width="0dp" android:layout_height="64dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_otp_box"
+                    android:gravity="center"
+                    android:inputType="number"
+                    android:maxLength="1"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary"
+                    android:textDirection="ltr"
+                    android:importantForAutofill="no" />
+
+            </LinearLayout>
+
+            <Space android:layout_width="match_parent" android:layout_height="20dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/resend_after"
+                android:textColor="#94A3B8"
+                android:textSize="13sp"
+                android:fontFamily="@font/cairo_regular" />
+
+            <TextView
+                android:id="@+id/tvTimer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="00:45"
+                android:textColor="@color/morex_gold"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:fontFamily="@font/cairo_bold"
+                android:textDirection="ltr"
+                android:layout_marginTop="6dp" />
+
+            <TextView
+                android:id="@+id/tvResend"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="إعادة الإرسال"
+                android:textColor="@color/morex_gold"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:fontFamily="@font/cairo_bold"
+                android:padding="8dp"
+                android:layout_marginTop="6dp" />
+
+            <Space android:layout_width="match_parent" android:layout_height="20dp" />
+
+            <!-- ⭐ زر تحقق — ارتفاع بدون قطع النص -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnVerify"
+                style="@style/MorexButton.Primary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="60dp"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp"
+                android:text="@string/verify" />
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginTop="12dp"
+                android:indeterminateTint="@color/morex_gold"
+                android:visibility="gone" />
+
+            <Space android:layout_width="match_parent" android:layout_height="12dp" />
+
+            <!-- ⭐ زر تغيير الرقم — تباين أعلى -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnChangePhone"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="56dp"
+                android:paddingTop="14dp"
+                android:paddingBottom="14dp"
+                android:text="@string/change_phone"
+                android:textColor="#FFFFFF"
+                android:fontFamily="@font/cairo_bold"
+                app:strokeColor="#FFFFFF"
+                app:strokeWidth="1.5dp"
+                app:cornerRadius="16dp" />
+
+            <Space android:layout_width="match_parent" android:layout_height="20dp" />
+
+        </LinearLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

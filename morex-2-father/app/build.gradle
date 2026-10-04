@@ -1,0 +1,146 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id 'com.google.gms.google-services'
+    id 'kotlin-kapt'
+}
+
+android {
+    namespace 'com.morex.father'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.morex.father"
+        minSdk 21
+        targetSdk 34
+        versionCode 1
+        versionName "1.0.0"
+        vectorDrawables { useSupportLibrary true }
+        multiDexEnabled true
+
+        // Certificate pinning: دبابيس SPKI مفصولة بفواصل، مثل sha256/AAAA...=,sha256/BBBB...=
+        // تُمرَّر عبر -PMOREX_CERT_PINS أو gradle.properties المحلي (انظر scripts/get_pins.sh).
+        buildConfigField "String", "CERT_PINS", "\"${project.findProperty('MOREX_CERT_PINS') ?: ''}\""
+        // SHA-256 لشهادة توقيع الإصدار (اختياري) لفحص anti-tamper؛ فارغ = معطّل.
+        // MOREX_PIN_ENFORCE=true يجعل الاتصال يفشل عند عدم تطابق الدبوس. الافتراضي false = تسجيل فقط (لا قفل للتطبيق).
+        buildConfigField "boolean", "PIN_ENFORCE", "${project.findProperty('MOREX_PIN_ENFORCE') ?: 'false'}"
+        buildConfigField "String", "EXPECTED_SIGNATURE_SHA256", "\"${project.findProperty('MOREX_SIGNATURE_SHA256') ?: ''}\""
+    }
+
+    // التوقيع: كلمات المرور من متغيرات البيئة أو gradle.properties المحلي فقط — لا قيم افتراضية في الكود.
+    def ksPass  = System.getenv("KEYSTORE_PASSWORD") ?: project.findProperty("MOREX_KEYSTORE_PASSWORD")
+    def ksAlias = System.getenv("KEY_ALIAS")         ?: project.findProperty("MOREX_KEY_ALIAS")
+    def keyPass = System.getenv("KEY_PASSWORD")      ?: project.findProperty("MOREX_KEY_PASSWORD")
+    def signingReady = file("morex-father.jks").exists() && ksPass && ksAlias && keyPass
+
+    signingConfigs {
+        release {
+            if (signingReady) {
+                storeFile file("morex-father.jks")
+                storePassword ksPass
+                keyAlias ksAlias
+                keyPassword keyPass
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            if (signingReady) {
+                signingConfig signingConfigs.release
+            }
+        }
+        debug {
+            debuggable true
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    kotlinOptions { jvmTarget = '17' }
+
+    buildFeatures {
+        viewBinding true
+        buildConfig true
+    }
+
+    packaging {
+        resources {
+            excludes += '/META-INF/{AL2.0,LGPL2.1}'
+            excludes += 'META-INF/DEPENDENCIES'
+            excludes += 'META-INF/LICENSE'
+            excludes += 'META-INF/LICENSE.txt'
+            excludes += 'META-INF/NOTICE'
+            excludes += 'META-INF/NOTICE.txt'
+        }
+    }
+
+    lint {
+        abortOnError false
+        checkReleaseBuilds false
+    }
+}
+
+dependencies {
+    implementation 'androidx.core:core-ktx:1.12.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.11.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.activity:activity-ktx:1.8.2'
+    implementation 'androidx.fragment:fragment-ktx:1.6.2'
+    implementation 'androidx.multidex:multidex:2.0.1'
+
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.7.0'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.7.0'
+    implementation 'androidx.lifecycle:lifecycle-service:2.7.0'
+
+    implementation 'androidx.recyclerview:recyclerview:1.3.2'
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+
+    implementation 'androidx.room:room-runtime:2.6.1'
+    implementation 'androidx.room:room-ktx:2.6.1'
+    kapt 'androidx.room:room-compiler:2.6.1'
+
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation 'com.squareup.okhttp3:okhttp:4.12.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.12.0'
+
+    implementation('io.socket:socket.io-client:2.1.0') {
+        exclude group: 'org.json', module: 'json'
+    }
+
+    implementation platform('com.google.firebase:firebase-bom:32.7.2')
+    implementation 'com.google.firebase:firebase-messaging-ktx'
+    implementation 'com.google.firebase:firebase-analytics-ktx'
+
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.3'
+
+    implementation 'com.google.android.gms:play-services-maps:18.2.0'
+    implementation 'com.google.android.gms:play-services-location:21.1.0'
+    implementation 'com.google.android.gms:play-services-auth:20.7.0'
+
+    implementation 'com.github.bumptech.glide:glide:4.16.0'
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
+
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+    implementation 'com.airbnb.android:lottie:6.4.0'
+
+    implementation 'androidx.security:security-crypto:1.1.0-alpha06'
+    implementation 'androidx.biometric:biometric:1.1.0'
+    implementation 'at.favre.lib:bcrypt:0.10.2'
+    implementation 'com.tbuonomo:dotsindicator:5.0'
+    implementation 'com.google.zxing:core:3.5.3'
+
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+}

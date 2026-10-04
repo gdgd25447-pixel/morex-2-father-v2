@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="Theme.MorexFather" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/morex_blue</item>
+        <item name="colorPrimaryVariant">@color/morex_blue_light</item>
+        <item name="colorOnPrimary">@color/text_on_primary</item>
+        <item name="colorSecondary">@color/morex_gold</item>
+        <item name="colorSecondaryVariant">@color/morex_gold_light</item>
+        <item name="colorOnSecondary">@color/text_primary</item>
+        <item name="android:colorBackground">@color/background</item>
+        <item name="colorSurface">@color/surface</item>
+        <item name="colorOnSurface">@color/text_primary</item>
+        <item name="colorError">@color/status_danger</item>
+        <item name="android:statusBarColor">@color/morex_blue</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:navigationBarColor">@color/surface</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="27">true</item>
+        <item name="android:windowBackground">@color/background</item>
+        <item name="fontFamily">@font/cairo_regular</item>
+        <item name="android:fontFamily">@font/cairo_regular</item>
+    </style>
+
+    <style name="Theme.MorexFather.Splash" parent="Theme.MorexFather">
+        <item name="android:windowBackground">@color/morex_blue_dark</item>
+        <item name="android:statusBarColor">@color/morex_blue_dark</item>
+        <item name="android:navigationBarColor">@color/morex_blue_dark</item>
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+
+    <style name="Theme.MorexFather.Transparent" parent="Theme.MorexFather">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:backgroundDimEnabled">true</item>
+    </style>
+
+    <!-- ✅ Text Appearance للأزرار -->
+    <style name="MorexButtonText" parent="android:TextAppearance">
+        <item name="android:fontFamily">@font/cairo_bold</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+    <style name="MorexButton.Primary" parent="Widget.MaterialComponents.Button">
+        <item name="android:paddingTop">14dp</item>
+        <item name="android:paddingBottom">14dp</item>
+        <item name="backgroundTint">@color/morex_blue</item>
+        <item name="android:textColor">@color/text_on_primary</item>
+        <item name="cornerRadius">16dp</item>
+        <item name="android:textAppearance">@style/MorexButtonText</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+    <style name="MorexButton.Gold" parent="Widget.MaterialComponents.Button">
+        <item name="android:paddingTop">14dp</item>
+        <item name="android:paddingBottom">14dp</item>
+        <item name="backgroundTint">@color/morex_gold</item>
+        <item name="android:textColor">@color/text_on_primary</item>
+        <item name="cornerRadius">16dp</item>
+        <item name="android:textAppearance">@style/MorexButtonText</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+    <style name="MorexCard" parent="Widget.MaterialComponents.CardView">
+        <item name="cardCornerRadius">20dp</item>
+        <item name="cardElevation">2dp</item>
+        <item name="cardBackgroundColor">@color/surface</item>
+        <item name="android:layout_marginBottom">12dp</item>
+    </style>
+
+    <style name="MorexInput" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxCornerRadiusTopStart">16dp</item>
+        <item name="boxCornerRadiusTopEnd">16dp</item>
+        <item name="boxCornerRadiusBottomStart">16dp</item>
+        <item name="boxCornerRadiusBottomEnd">16dp</item>
+        <item name="boxStrokeColor">@color/morex_blue</item>
+    </style>
+
+</resources>
