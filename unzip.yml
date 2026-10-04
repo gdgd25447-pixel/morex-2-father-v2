@@ -1,0 +1,35 @@
+name: Download and Extract Father ZIP
+
+on:
+  workflow_dispatch:
+
+jobs:
+  download-and-extract:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download ZIP from Google Drive
+        run: |
+          echo "📥 Downloading ZIP..."
+          curl -L "https://drive.google.com/uc?export=download&id=FILE_ID" -o morex-2-father-final.zip
+          ls -lh morex-2-father-final.zip
+
+      - name: Extract ZIP
+        run: |
+          echo "📦 Extracting..."
+          unzip -o morex-2-father-final.zip
+          rm -f morex-2-father-final.zip
+          echo "📂 Extracted files:"
+          ls -la
+
+      - name: Commit files
+        run: |
+          git config user.name "MOREX Bot"
+          git config user.email "bot@morex.app"
+          git add .
+          git commit -m "Download and extract father ZIP" || echo "No changes"
+          git push
