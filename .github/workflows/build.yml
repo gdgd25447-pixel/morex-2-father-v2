@@ -1,64 +1,79 @@
-name: Build Morex Father APK
+name: Build MOREX Father APK
 
 on:
   push:
-    branches: [main]
+    branches: [ main ]
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Java 17
+      - name: Verify project files
+        run: |
+          echo "📂 محتوى الجذر:"
+          ls -la
+          test -d app || (echo "❌ app/ missing" && exit 1)
+          test -f build.gradle || (echo "❌ build.gradle missing" && exit 1)
+          echo "✅ Project structure OK"
+
+      - name: Setup JDK 17
         uses: actions/setup-java@v4
         with:
-          distribution: 'temurin'
           java-version: '17'
+          distribution: 'temurin'
 
-      - name: Setup Gradle with Cache
+      - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
         with:
           gradle-version: '8.4'
-          cache-read-only: false
 
-      - name: Decode Google Services (Firebase)
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Decode google-services.json
         run: |
-          if [ -n "${{ secrets.GOOGLE_SERVICES_JSON_BASE64 }}" ]; then
-            echo "${{ secrets.GOOGLE_SERVICES_JSON_BASE64 }}" | base64 -d > app/google-services.json
-            echo "✅ google-services.json created"
-          else
-            echo "⚠️ GOOGLE_SERVICES_JSON_BASE64 not set — Firebase will not work"
+          if [ -z "${{ secrets.GOOGLE_SERVICES_JSON_BASE64 }}" ]; then
+            echo "❌ GOOGLE_SERVICES_JSON_BASE64 غير مضاف في Secrets"
+            exit 1
           fi
+          echo "${{ secrets.GOOGLE_SERVICES_JSON_BASE64 }}" | base64 --decode > app/google-services.json
+          echo "✅ google-services.json: $(wc -c < app/google-services.json) bytes"
 
       - name: Decode Keystore (optional)
         run: |
           if [ -n "${{ secrets.KEYSTORE_BASE64 }}" ]; then
-            mkdir -p app
-            echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > app/morex-father.jks
-            echo "✅ Keystore decoded"
+            echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > morex-father.jks
+            echo "✅ Keystore: $(wc -c < morex-father.jks) bytes"
           else
-            echo "⚠️ KEYSTORE_BASE64 not set — using debug keystore"
+            echo "⚠️ KEYSTORE_BASE64 غير مضاف — سنستخدم debug signing"
           fi
+
+      - name: Grant execute to gradlew
+        run: chmod +x gradlew
 
       - name: Build Debug APK
         env:
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
-        run: gradle assembleDebug --stacktrace
+        run: |
+          ./gradlew assembleDebug --stacktrace
 
       - name: Build Release APK
-        if: success()
+        continue-on-error: true
         env:
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
-        run: gradle assembleRelease --stacktrace
-        continue-on-error: true
+        run: |
+          ./gradlew assembleRelease --stacktrace
 
       - name: Upload Debug APK
         if: always()
@@ -66,8 +81,7 @@ jobs:
         with:
           name: morex-father-debug
           path: app/build/outputs/apk/debug/*.apk
-          retention-days: 30
-          if-no-files-found: ignore
+          if-no-files-found: warn
 
       - name: Upload Release APK
         if: always()
@@ -75,5 +89,4 @@ jobs:
         with:
           name: morex-father-release
           path: app/build/outputs/apk/release/*.apk
-          retention-days: 90
           if-no-files-found: ignore
