@@ -14,25 +14,26 @@ jobs:
 
       - name: Download ZIP from Google Drive
         run: |
-          echo "📥 Downloading ZIP..."
+          echo "Downloading ZIP..."
           FILE_ID="165nBZF28et3iTZjBWk8DP3-U1TiZr6wL"
-          curl -L -c /tmp/cookies.txt \
-            "https://drive.usercontent.google.com/download?id=${FILE_ID}&export=download" \
-            -o morex-2-father-final.zip
+          curl -L -c /tmp/cookies.txt "https://drive.google.com/uc?export=download&id=${FILE_ID}" > /tmp/interstitial.html
+          CONFIRM=$(grep -o 'confirm=[^&]*' /tmp/interstitial.html | cut -d'=' -f2)
+          curl -L -b /tmp/cookies.txt "https://drive.google.com/uc?export=download&confirm=${CONFIRM}&id=${FILE_ID}" -o morex-2-father-final.zip
           ls -lh morex-2-father-final.zip
 
       - name: Extract ZIP
         run: |
-          echo "📦 Extracting..."
+          echo "Extracting..."
           unzip -o morex-2-father-final.zip
           rm -f morex-2-father-final.zip
-          echo "📂 Extracted files:"
+          echo "Extracted Files:"
           ls -la
 
-      - name: Commit files
+      - name: Commit Files
         run: |
           git config user.name "MOREX Bot"
           git config user.email "bot@morex.app"
           git add .
-          git commit -m "Download and extract father ZIP" || echo "No changes"
+          git commit -m "Download and extract Father ZIP" || echo "No changes"
           git push
+          
